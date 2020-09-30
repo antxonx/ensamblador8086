@@ -1,9 +1,9 @@
     ; Evaluar si los años del archivo de entrada son bisiestos
-    ;y generar salida por consola y en archivo
+    ;y generar salida por consola y
     org 0x100
     ; Inicio del programa
     mov ah, 0x3c                          ; crear archivo para resultados
-    mov cx, 0                             ; sin atributos
+    mov cx, 0x0                           ; sin atributos
     mov dx, offset fileoutput             ; cargamos el nombre del archivo
     int 0x21                              ; ejecutamos la interrupción
     jc error                              ; si CF = 1 ocurrió un error
