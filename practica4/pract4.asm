@@ -12,6 +12,7 @@ start:
     dec cl
     cmp cl, 0x00
     je exit
+    jl isone
 pow:
     push w.[base]
     push [result]
@@ -24,6 +25,9 @@ pow:
     add sp, 4
     add b.[result+1], al
     loop pow
+    jmp exit
+isone:
+    mov [result], 0x0001
 exit:
     int 0x20
 mult8b:
