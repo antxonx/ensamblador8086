@@ -11,7 +11,6 @@
     int 10h
 
     mov dx, 0705h     
-    mov bx, 0         
     mov bl, 10011111b 
     mov cx, msg1_size  
     mov al, 01b       
@@ -19,53 +18,43 @@
     mov ah, 13h       
     int 10h  
     
-    mov dx, 0905h     
-    mov bx, 0         
+    mov dx, 0905h          
     mov bl, 10011111b 
-    mov cx, msg2_size  
-    mov al, 01b       
+    mov cx, msg2_size        
     mov bp, msg2
     mov ah, 13h       
     int 10h           
          
-    mov dx, 0B05h     
-    mov bx, 0         
-    mov bl, 10011111b 
-    mov cx, msg3_size  
-    mov al, 01b       
+    mov dx, 0B05h            
+    mov bl, 11111001b 
+    mov cx, msg3_size       
     mov bp, msg3
     mov ah, 13h       
     int 10h           
 
-    mov dx, 0C05h     
-    mov bx, 0         
-    mov bl, 10011111b 
-    mov cx, msg4_size  
-    mov al, 01b       
+    mov dx, 0C05h             
+    mov bl, 11111001b 
+    mov cx, msg4_size        
     mov bp, msg4
     mov ah, 13h       
     int 10h           
 
-    mov dx, 0D05h     
-    mov bx, 0         
-    mov bl, 10011111b 
-    mov cx, msg5_size  
-    mov al, 01b       
+    mov dx, 0D05h            
+    mov bl, 11111001b 
+    mov cx, msg5_size       
     mov bp, msg5
     mov ah, 13h       
     int 10h           
  
-    mov dx, 0E05h     
-    mov bx, 0         
-    mov bl, 10011111b 
-    mov cx, msg6_size  
-    mov al, 01b       
+    mov dx, 0E05h            
+    mov bl, 11111001b 
+    mov cx, msg6_size        
     mov bp, msg6
     mov ah, 13h       
     int 10h           
 
     mov ah, 0          
-    int 10110b
+    int 0x16
    
     mov ax,0
     mov bx,0
@@ -98,7 +87,7 @@ D1      db 0  ;Variables internas
 D2      db 0
 P0      dw 0  
     
-msg1:   db "Seccion D08"
+msg1:   db "Seccion D07"
 msg2:   db "Introduce tus datos en la memoria:"
 msg3:   db "Dato1 variable de entrada de 8 bits"
 msg4:   db "Dato2 variable de entrada de 8 bits"
