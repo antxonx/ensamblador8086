@@ -4,12 +4,10 @@
     base db 0x15
     exp db 0x02
     result dw 0x0000
-
 start:
     mov al, [base]
     xor ah, ah
     mov [result], ax
-
     mov cl, [exp]
     dec cl
     cmp cl, 0x00
@@ -19,18 +17,15 @@ pow:
     push [result]
     call mult8b
     add sp, 4
-
     push w.[base]
     push [result+1]
     mov [result], ax
     call mult8b
     add sp, 4
     add b.[result+1], al
-
     loop pow
 exit:
     int 0x20
-
 mult8b:
     push bp
     push bx
