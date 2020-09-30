@@ -9,6 +9,7 @@ start:
     xor ah, ah
     mov [result], ax
     mov cl, [exp]
+    xor ch, ch
     dec cl
     cmp cl, 0x00
     je exit
