@@ -1,4 +1,4 @@
-    name "p4"
+    name "p4" ;TODO: comentarios
     org 0x100
     jmp start
     base db 0x15
