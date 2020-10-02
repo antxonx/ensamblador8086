@@ -1,5 +1,5 @@
-    name "p4"                                                     ; TODO: comentarios
-    org 0x100                                                     ; Iniciar el 0x100
+    name "p4"                                                     ; Nombre del programa
+    org 0x100                                                     ; Iniciar en 0x100
     jmp start                                                     ; Saltamos al codigo
     base db 0x00                                                  ; Aquí se debe colocar el valor base
     exp db 0x00                                                   ; Aquí se debe colocar el exponente
