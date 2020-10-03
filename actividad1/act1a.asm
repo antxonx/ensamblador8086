@@ -122,7 +122,7 @@ error:
     result db "aaaa", 0x0d, 0x0a, "$"     ; aqui se guarda el resultado con formato para imprimir
     filename db "bisiesto.txt", 0         ; nombre del archivo
     fileoutput db "bisiestoresult.txt", 0 ; nombre del archivo de salida
-    handle dw ?                           ; handler
-    handleRes dw ?                        ; handler para resultado
-    filesize dw ?                         ; tamaño del archivo
-    cont db ?                             ; contenido del archivo
+    handle dw 0x0000                      ; handler
+    handleRes dw 0x0000                   ; handler para resultado
+    filesize dw 0x0000                    ; tamaño del archivo
+    cont db 0x0000                        ; contenido del archivo
