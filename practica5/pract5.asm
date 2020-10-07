@@ -5,6 +5,7 @@
     jmp start               ; brincamos las variables
     cadena db 5 dup(0)      ; declaración de cadena de entrada
     cadenaSize equ $-cadena ; tamaño de la cadena de salida
+    cadenaSalida "00000", 0 ; cadena de salida
     numero dw 0x0000        ; número de salida
     cadenaInicio dw 0x0000  ; dirección de inicio de la cadena
 start:
@@ -73,3 +74,6 @@ charToHex:
     sub al, 0x20            ; al = al - 0x20
 charToHex_finish:
     ret                     ; vovlemos al codigo principal
+
+printNum:
+    ret
