@@ -18,7 +18,7 @@ start:
     call convert            ; llamamos a convert
 exit:
     int 0x20                ; finalizamos el programa
-
+; funcion para convertir string a entero de 16 bits
 convert:
     push si                 ; respaldamos si
     push di                 ; respaldamos di
@@ -60,7 +60,7 @@ convert_exit:
     pop di                  ; recuperamos di
     pop si                  ; recuperamos si
     ret                     ; volvemos al codigo principal
-
+; convertir caracter a entero de 4 bits
 charToHex:
     sub al, 0x30            ; al = al - 0x30
     cmp al, 0x09            ; comparamos al con 0x09
