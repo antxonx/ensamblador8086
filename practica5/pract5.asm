@@ -45,10 +45,16 @@ convert_second:
     mov cl, 0x00 ;cl = 0x00
     rol al, 0x04 ;rotamos 4 bits a la izquierda
     add ch, al ;ch = ch + al
+convert_write:
     mov [di], ch ;[di] = ch
     inc di ;di++
+    cmp cl, 0x01 ;comparamos cl con 0x01
+    jz convert_exit ;si no hay mas numeros brincamos a convert_exit
     jmp convert_start ;brincamos a convert_start
 convert_finish:
+    cmp cl, 0x01 ;comparamos cl con 0x01
+    jz convert_write ;si cl == 0x01 brincamos a convert_write
+convert_exit:
     pop cx ;recuperamos cx
     pop ax ;recuperamos ax
     pop di ;recuperamos di
