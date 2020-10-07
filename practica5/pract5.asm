@@ -8,6 +8,7 @@
     numero dw 0x0000        ; número de salida
     cadenaInicio dw 0x0000  ; dirección de inicio de la cadena
 start:
+    ;TODO: imprimir textos
     mov dx, cadenaSize      ; pasamos el tamaño de la cadena de entrada
     lea di, cadena          ; cargamos la dreccion de memeoria de la cadena de entrada
     mov cadenaInicio, di    ; guardamos esa direccion
@@ -16,6 +17,7 @@ start:
     mov bx, cadenaSize      ; bx = cadenaSize
     lea si, cadena + [bx]   ; cargamos a si la direccion del ultimo caracter de la cadena
     call convert            ; llamamos a convert
+    ;TODO: imprimir salida
 exit:
     int 0x20                ; finalizamos el programa
 ; funcion para convertir string a entero de 16 bits
