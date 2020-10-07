@@ -54,117 +54,117 @@ condition:
     jmp exit
 
 eval:
-    push cx
-    mov [A], bx
-    mov ax, [A]
-    mov bx, 19
-    xor dx, dx
-    div bx
-    mov [aa], dx
+    push cx            ;respaldamos cx
+    mov [A], bx        ;Guardamos el aÒo en A
+    mov ax, [A]        ;ax = A
+    mov bx, 19         ;bx = 19
+    xor dx, dx         ;limpiamos dx
+    div bx             ;ax = ax/bx, dx = ax%bx
+    mov [aa], dx       ;Pasamos el restante a aa
 
-    mov ax, [A]
-    mov bx, 4
-    xor dx, dx
-    div bx
-    mov [b], dx
+    mov ax, [A]        ;ax = A
+    mov bx, 4          ;bx = 4
+    xor dx, dx         ;dx = 0
+    div bx             ;ax = ax/bx, dx = ax%bx
+    mov [b], dx        ;b = dx
 
-    mov ax, [A]
-    mov bx, 7
-    xor dx, dx
-    div bx
-    mov [c], dx
+    mov ax, [A]        ;ax = A
+    mov bx, 7          ;bx = 7
+    xor dx, dx         ;dx = 0
+    div bx             ;ax = ax/bx, dx = ax%bx
+    mov [c], dx        ;c = dx
 
-    mov ax, [A]
-    mov bx, 100
-    xor dx, dx
-    div bx
-    mov [k], ax
+    mov ax, [A]        ;ax = A
+    mov bx, 100        ;bx = 100
+    xor dx, dx         ;dx = 0
+    div bx             ;ax = ax/bx, dx = ax%bx
+    mov [k], ax        ;k = ax
 
-    mov ax, [k]
-    mov bx, 8
-    mul bx
-    add ax, 13
-    mov bx, 25
-    xor dx, dx
-    div bx
-    mov [p], ax
+    mov ax, [k]        ;ax = k
+    mov bx, 8          ;bx = 8
+    mul bx             ;ax = ax*bx
+    add ax, 13         ;ax = ax+13
+    mov bx, 25         ;bx = 25
+    xor dx, dx         ;dx = 0
+    div bx             ;ax = ax/bx, dx = ax%bx
+    mov [p], ax        ;p = ax
 
-    mov ax, [k]
-    mov bx, 4
-    xor dx, dx
-    div bx
-    mov [q], ax
+    mov ax, [k]        ;ax = k
+    mov bx, 4          ;bx = 4
+    xor dx, dx         ;dx = 0
+    div bx             ;ax = ax/bx, dx = ax%bx
+    mov [q], ax        ;q = ax
 
-    mov ax, 15
-    sub ax, [p]
-    add ax, [k]
-    sub ax, q
-    mov bx, 30
-    xor dx, dx
-    div bx
-    mov [M], dx
+    mov ax, 15         ;ax = 15
+    sub ax, [p]        ;ax = ax - p
+    add ax, [k]        ;ax = ax + k
+    sub ax, [q]        ;ax = ax - q
+    mov bx, 30         ;bx = 30
+    xor dx, dx         ;dx = 0
+    div bx             ;ax = ax/bx, dx = ax%bx
+    mov [M], dx        ;M = dx
 
-    mov ax, 4
-    add ax, [k]
-    sub ax, [q]
-    mov bx, 7
-    xor dx, dx
-    div bx
-    mov [N], dx
+    mov ax, 4          ;ax = 4
+    add ax, [k]        ;ax = ax + k
+    sub ax, [q]        ;ax = ax - q
+    mov bx, 7          ;bx = 7
+    xor dx, dx         ;dx = 0
+    div bx             ;ax = ax/bx, dx = ax%bx
+    mov [N], dx        ;N = dx
 
-    mov ax, 19
-    mul [aa]
-    add ax, [M]
-    mov bx, 30
-    xor dx, dx
-    div bx
-    mov [d], dx
+    mov ax, 19         ;ax = 19
+    mul [aa]           ;ax = ax * aa
+    add ax, [M]        ;ax = ax + M
+    mov bx, 30         ;bx = 30
+    xor dx, dx         ;dx = 0
+    div bx             ;ax = ax/bx, dx = ax%bx
+    mov [d], dx        ;d = dx
 
-    mov ax, 2
-    mul [b]
-    mov cx, ax
-    mov ax, 4
-    mul [c]
-    add cx, ax
-    mov ax, 6
-    mul [d]
-    add ax, cx
-    add ax, [N]
-    mov bx, 7
-    xor dx, dx
-    div bx
-    mov [e], dx
-    pop cx
+    mov ax, 2          ;ax = 2
+    mul [b]            ;ax = ax * b
+    mov cx, ax         ;cx = ax
+    mov ax, 4          ;ax = 4
+    mul [c]            ;ax = ax * c
+    add cx, ax         ;cx = cx + ax
+    mov ax, 6          ;ax = 6
+    mul [d]            ;ax = ax * d
+    add ax, cx         ;ax = ax + cx
+    add ax, [N]        ;ax = ax + N
+    mov bx, 7          ;bx = 7
+    xor dx, dx         ;dx = 0
+    div bx             ;ax = ax/bx, dx = ax%bx
+    mov [e], dx        ;e = dx
+    pop cx             ;recuperamos cx
 
-    mov ax, [e]
-    add ax, [d]
-    cmp ax, 10
-    jnb abril
-    jmp marzo
+    mov ax, [e]        ;ax = e
+    add ax, [d]        ;ax = ax + d
+    cmp ax, 10         ;comparamos ax con 10
+    jnb abril          ;brinca a abril si ax>=10
+    jmp marzo          ;sino brinca a marzo
 marzo:
-    push cx
-    push si
-    add ax, 22
-    mov [day], ax
-    mov cx, abrilDate - offset marzoDate
-    mov si, offset marzoDate
-    mov di, offset month
-    rep movsb
-    pop si
-    pop cx
-    jmp output
+    push cx                              ;respaldamos cx
+    push si                              ;respaldamos si
+    add ax, 22                           ;ax = ax + 22
+    mov [day], ax                        ;day = ax
+    mov cx, abrilDate - offset marzoDate ;tamano de la cadena marzoDate
+    mov si, offset marzoDate             ;apuntador a inicio de marzoDate
+    mov di, offset month                 ;apuntador a inicio de month (para imprimir)
+    rep movsb                            ;Copiar marzoDate a month
+    pop si                               ;recuperamos is
+    pop cx                               ;recuperamos cx
+    jmp output                           ;brincar a output
 abril:
-    push cx
-    push si
-    sub ax, 9
-    mov [day], ax
-    mov cx, month - offset abrilDate
-    mov si, offset abrilDate
-    mov di, offset month
-    rep movsb
-    pop si
-    pop cx
-    jmp output
+    push cx                              ;respaldamos cx
+    push si                              ;respaldamos si
+    sub ax, 9                            ;ax = ax - 22
+    mov [day], ax                        ;day = ax
+    mov cx, month - offset abrilDate     ;tamano de la cadena abrilDate
+    mov si, offset abrilDate             ;apuntador a inicio de abrilDate
+    mov di, offset month                 ;apuntador a inicio de month (para imprimir)
+    rep movsb                            ;Copiar abrilDate a month
+    pop si                               ;recuperamos is
+    pop cx                               ;recuperamos cx
+    jmp output                           ;brincar a output
 output:
     push cx
     push si                               ; respaldamos si
@@ -189,8 +189,10 @@ store:
     jmp output2
 
 output2:
-    push cx
+    push cx                               ;respaldamos cx
     push si                               ; respaldamos si
+    mov [dayOut], "0"                     ;limpiamos dayOut
+    mov [dayOut + 1], "0"                 ;limpiamos dayOut
     lea si, dayOut + 2                    ; posicionamos el puntero al final
     mov ax, [day]                            ; ponemos el valor a convertir en ax
     mov bx, divid                         ; cargarmos 0x0a a bx para divir
@@ -208,11 +210,11 @@ store2:
     jnz convert2                           ; seguimos convierto a ascii
 
     mov dx, offset year                 ; cargamos la cadena a imprimir
-        mov ah, 0x09                          ; usamos la opcon 0x09
-        int 0x21                              ; de la interrupcion 0x21
-        mov dx, offset month                 ; cargamos la cadena a imprimir
-        mov ah, 0x09                          ; usamos la opcon 0x09
-        int 0x21                              ; de la interrupcion 0x21
+    mov ah, 0x09                          ; usamos la opcon 0x09
+    int 0x21                              ; de la interrupcion 0x21
+    mov dx, offset month                 ; cargamos la cadena a imprimir
+    mov ah, 0x09                          ; usamos la opcon 0x09
+    int 0x21                              ; de la interrupcion 0x21
                              ; de la interrupcion 0x21
     mov dx, offset dayOut                 ; cargamos la cadena a imprimir
     mov ah, 0x09                          ; usamos la opcon 0x09
@@ -221,7 +223,8 @@ store2:
     pop cx
 
     jmp restart
-restart:
+restart:    
+
     xor bx, bx                            ; limpiamos bx
     xor ah, ah                            ; limpiamos ah
     mov dx, initial                       ; ponemos a dx en su valor inicial (1000)
@@ -246,12 +249,11 @@ error:
    e dw 0x0000
    day dw 0x0000
    dayOut db "00", 0x0d, 0x0a, "$"
-   year db "aaaa", 0, "$"
-   marzoDate db "/3/", 0, "$"
-   abrilDate db "/4/", 0, "$"
-   month db "aaa", 0, "$"
+   year db "aaaa$"
+   marzoDate db "/3/$"
+   abrilDate db "/4/$"
+   month db "aaa$"
    filename db "semanaSanta.txt", 0
-   fileoutput db "semanaSantaOut.txt", 0
    filesize dw 0x0000                    ; tama√±o del archivo
    handle dw 0x0000
    cont db 0x0
