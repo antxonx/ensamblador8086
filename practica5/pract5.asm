@@ -3,7 +3,7 @@
     org  0x100
     DEFINE_GET_STRING       ; definimos la funcion get_string de emu8086
     jmp start               ; brincamos las variables
-    cadena db 5 dup(0)      ; declaración de cadena final
+    cadena db 5 dup(0)      ; declaración de cadena de entrada
     cadenaSize equ $-cadena ; tamaño de la cadena de salida
     numero dw 0x0000        ; número de salida
     cadenaInicio dw 0x0000  ; dirección de inicio de la cadena
