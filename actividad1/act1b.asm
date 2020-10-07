@@ -1,13 +1,5 @@
-    ; Evaluar si los años del archivo de entrada son bisiestos
-    ;y generar salida por consola y
     org 0x100
     ; Inicio del programa
-    mov ah, 0x3c                          ; crear archivo para resultados
-    mov cx, 0x0                           ; sin atributos
-    mov dx, offset fileoutput             ; cargamos el nombre del archivo
-    int 0x21                              ; ejecutamos la interrupción
-    jc error                              ; si CF = 1 ocurrió un error
-    mov handleRes, ax                     ; guardamos el handle
     mov ax, 0x3d00                        ; abrir archivo en modo lectura
     mov dx, offset filename               ; cargamos el nombre del archivo
     int 0x21                              ; ejecutamos la interrupción
@@ -59,26 +51,125 @@ readBytes:
 condition:
     inc si                                ; aumentamos el punto del texto
     loop readBytes                        ; si cx > 0 volvemos a readBytes, c--
-    jmp exit                              ; sino vamos a la salida
+    jmp exit
+
 eval:
-    push cx                               ; respaldamos cx
-    mov ax, bx                            ; movemos bx a ax para la division
-    xor dx, dx                            ; limpiamos dx
-    mov cx, bisiesto                      ; cargamos el 4
-    div cx                                ; dividimos ax / cx
-    pop cx                                ; recuperamos cx
-    cmp dx, 0x0000                        ; verificamos si hay residuo o no
-    je correct                            ; si hay lo mostramos
-restart:
-    xor bx, bx                            ; limpiamos bx
-    xor ah, ah                            ; limpiamos ah
-    mov dx, initial                       ; ponemos a dx en su valor inicial (1000)
-    jmp condition                         ; brincamos al bucle principal
-correct:
-    push cx                               ; respaldamos cx
+    push cx
+    mov [A], bx
+    mov ax, [A]
+    mov bx, 19
+    xor dx, dx
+    div bx
+    mov [aa], dx
+
+    mov ax, [A]
+    mov bx, 4
+    xor dx, dx
+    div bx
+    mov [b], dx
+
+    mov ax, [A]
+    mov bx, 7
+    xor dx, dx
+    div bx
+    mov [c], dx
+
+    mov ax, [A]
+    mov bx, 100
+    xor dx, dx
+    div bx
+    mov [k], ax
+
+    mov ax, [k]
+    mov bx, 8
+    mul bx
+    add ax, 13
+    mov bx, 25
+    xor dx, dx
+    div bx
+    mov [p], ax
+
+    mov ax, [k]
+    mov bx, 4
+    xor dx, dx
+    div bx
+    mov [q], ax
+
+    mov ax, 15
+    sub ax, [p]
+    add ax, [k]
+    sub ax, q
+    mov bx, 30
+    xor dx, dx
+    div bx
+    mov [M], dx
+
+    mov ax, 4
+    add ax, [k]
+    sub ax, [q]
+    mov bx, 7
+    xor dx, dx
+    div bx
+    mov [N], dx
+
+    mov ax, 19
+    mul [aa]
+    add ax, [M]
+    mov bx, 30
+    xor dx, dx
+    div bx
+    mov [d], dx
+
+    mov ax, 2
+    mul [b]
+    mov cx, ax
+    mov ax, 4
+    mul [c]
+    add cx, ax
+    mov ax, 6
+    mul [d]
+    add ax, cx
+    add ax, [N]
+    mov bx, 7
+    xor dx, dx
+    div bx
+    mov [e], dx
+    pop cx
+
+    mov ax, [e]
+    add ax, [d]
+    cmp ax, 10
+    jnb abril
+    jmp marzo
+marzo:
+    push cx
+    push si
+    add ax, 22
+    mov [day], ax
+    mov cx, abrilDate - offset marzoDate
+    mov si, offset marzoDate
+    mov di, offset month
+    rep movsb
+    pop si
+    pop cx
+    jmp output
+abril:
+    push cx
+    push si
+    sub ax, 9
+    mov [day], ax
+    mov cx, month - offset abrilDate
+    mov si, offset abrilDate
+    mov di, offset month
+    rep movsb
+    pop si
+    pop cx
+    jmp output
+output:
+    push cx
     push si                               ; respaldamos si
-    lea si, result + 4                    ; posicionamos el puntero al final
-    mov ax, bx                            ; ponemos el valor a convertir en ax
+    lea si, year + 4                    ; posicionamos el puntero al final
+    mov ax, [A]                            ; ponemos el valor a convertir en ax
     mov bx, divid                         ; cargarmos 0x0a a bx para divir
 convert:
     xor dx, dx                            ; limpiamos dx para la division
@@ -92,37 +183,75 @@ store:
     mov [si], dl                          ; guardamos el digito
     and ax, ax                            ; verificamos si no hay mas que hacer
     jnz convert                           ; seguimos convierto a ascii
-    mov dx, offset result                 ; cargamos la cadena a imprimir
+
+    pop si
+    pop cx
+    jmp output2
+
+output2:
+    push cx
+    push si                               ; respaldamos si
+    lea si, dayOut + 2                    ; posicionamos el puntero al final
+    mov ax, [day]                            ; ponemos el valor a convertir en ax
+    mov bx, divid                         ; cargarmos 0x0a a bx para divir
+convert2:
+    xor dx, dx                            ; limpiamos dx para la division
+    div bx                                ; Dividimos entre 10
+    add dl, 0x30                          ; le sumamos 0x30 para imprimir
+    cmp dl, '9'                           ; verificamos que no sea hexadecimal
+    jbe store2                             ; si no es lo guardamos
+    add dl, 'A'-'0'-10                    ; si es lo ajustamos
+store2:
+    dec si                                ; una posicion atras
+    mov [si], dl                          ; guardamos el digito
+    and ax, ax                            ; verificamos si no hay mas que hacer
+    jnz convert2                           ; seguimos convierto a ascii
+
+    mov dx, offset year                 ; cargamos la cadena a imprimir
+        mov ah, 0x09                          ; usamos la opcon 0x09
+        int 0x21                              ; de la interrupcion 0x21
+        mov dx, offset month                 ; cargamos la cadena a imprimir
+        mov ah, 0x09                          ; usamos la opcon 0x09
+        int 0x21                              ; de la interrupcion 0x21
+                             ; de la interrupcion 0x21
+    mov dx, offset dayOut                 ; cargamos la cadena a imprimir
     mov ah, 0x09                          ; usamos la opcon 0x09
     int 0x21                              ; de la interrupcion 0x21
-    mov ax, 0x4202                        ; vamos al final del archivo
-    mov bx, handleRes                     ; especificamos el handle del archivo
-    mov dx, 0x0                           ; sin offset
-    mov cx, 0x0                           ; sin offset
-    int 0x21                              ; ejecutamos la interrupción
-    jc error
-    mov ah, 0x40                          ; opcion para escribir en archivo
-    mov bx, handleRes                     ; pasamos el handle del archivo
-    mov cx, filename - offset result - 1  ; tamano de cadena a imprimir (-1 para evitar "$")
-    mov dx, offset result                 ; dirección de la cadena
-    int 0x21                              ; ejecutamos la interrupcion
-    jc error
-    pop si                                ; recuperamos si
-    pop cx                                ; recuperamos cx
-    jmp restart                           ; volvemos a empezar con el siguiente dato
+    pop si
+    pop cx
+
+    jmp restart
+restart:
+    xor bx, bx                            ; limpiamos bx
+    xor ah, ah                            ; limpiamos ah
+    mov dx, initial                       ; ponemos a dx en su valor inicial (1000)
+    jmp condition                         ; brincamos al bucle principal
+
 exit:
-    mov ah, 0x3e                          ; cerrar el archivo
-    mov bx, handleRes                     ; especificamos el handler
-    int 0x21                              ; ejecutamos la interrupción
+    int 0x20
 error:
-    int 0x20                              ; salimos del programa
-    divid equ 0x0a                        ; para dividir entre 10
-    bisiesto equ 0x04                     ; para dividir los años
-    initial equ 0x03e8                    ; valor inicial (1000)
-    result db "aaaa", 0x0d, 0x0a, "$"     ; aqui se guarda el resultado con formato para imprimir
-    filename db "bisiesto.txt", 0         ; nombre del archivo
-    fileoutput db "bisiestoresult.txt", 0 ; nombre del archivo de salida
-    handle dw 0x0000                      ; handler
-    handleRes dw 0x0000                   ; handler para resultado
-    filesize dw 0x0000                    ; tamaño del archivo
-    cont db 0x0000                        ; contenido del archivo
+   int 0x20
+   divid equ 0x0a                        ; para dividir entre 10
+   initial equ 0x03e8                    ; valor inicial (1000)
+   A dw 0x0000
+   aa dw 0x0000
+   b dw 0x0000
+   c dw 0x0000
+   k dw 0x0000
+   p dw 0x0000
+   q dw 0x0000
+   M dw 0x0000
+   N dw 0x0000
+   d dw 0x0000
+   e dw 0x0000
+   day dw 0x0000
+   dayOut db "00", 0x0d, 0x0a, "$"
+   year db "aaaa", 0, "$"
+   marzoDate db "/3/", 0, "$"
+   abrilDate db "/4/", 0, "$"
+   month db "aaa", 0, "$"
+   filename db "semanaSanta.txt", 0
+   fileoutput db "semanaSantaOut.txt", 0
+   filesize dw 0x0000                    ; tamaño del archivo
+   handle dw 0x0000
+   cont db 0x0
