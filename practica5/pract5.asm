@@ -9,9 +9,14 @@
     salidaSize equ $-cadenaSalida ; tamaño de cadena de entrada
     numero dw 0x0000              ; número de salida
     cadenaInicio dw 0x0000        ; dirección de inicio de la cadena
+    msg1 db "Ingrese un numero en formato hexadecimal", 0 ; mesanje 1
+    msg1Size equ $-msg1                                   ; Tamaño de msg1
     msgFinal db "Decimal: ", 0    ; texto de respuesta
     msgFinalSize equ $-msgFinal   ; tamaño de texto de respuesta
 start:
+    lea bp, msg1                  ; cargar mensaje 1
+    mov cx, msg1Size              ; tamaño de msg1
+    call printn                   ; imprimir cadena
     mov dx, cadenaSize            ; pasamos el tamaño de la cadena de entrada
     lea di, cadena                ; cargamos la dreccion de memeoria de la cadena de entrada
     mov cadenaInicio, di          ; guardamos esa direccion
