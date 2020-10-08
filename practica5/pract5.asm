@@ -9,8 +9,9 @@
     salidaSize equ $-cadenaSalida ; tamaño de cadena de entrada
     numero dw 0x0000              ; número de salida
     cadenaInicio dw 0x0000        ; dirección de inicio de la cadena
+    msgFinal db "Decimal: ", 0    ; texto de respuesta
+    msgFinalSize equ $-msgFinal   ; tamaño de texto de respuesta
 start:
-    ; TODO: imprimir textos
     mov dx, cadenaSize            ; pasamos el tamaño de la cadena de entrada
     lea di, cadena                ; cargamos la dreccion de memeoria de la cadena de entrada
     mov cadenaInicio, di          ; guardamos esa direccion
@@ -25,7 +26,13 @@ start:
     dec di                        ; di--
     mov ax, [numero]              ; ax = numero convertido
     call numToBCD                 ; llamar a funcion para convertir entero a cadena
-    ; TODO: imprimir salida
+    call newLine                  ; imprimir salto de linea
+    lea bp, msgFinal              ; cargar mensaje final
+    mov cx, msgFinalSize          ; cx = tamaño msgFinal
+    call print                    ; imprimir texto final
+    lea bp, cadenaSalida          ; cargar numero en BCD
+    mov cx, salidaSize            ; cx = tamaño de salidaSize
+    call printn                   ; imprimir salida con salto de linea
 exit:
     int 0x20                      ; finalizamos el programa
 ; funcion para convertir string a entero de 16 bits
@@ -97,3 +104,35 @@ numToBCD_start:
     pop dx                        ; recuperar dx
     pop bx                        ; recuperar bx
     ret                           ; volver al codigo principal
+; imprimir salto de linea
+newLine:
+    mov ah, 0x0e                  ; opcion teletype
+    mov al, 0x0d                  ; retorno de carro
+    int 0x10                      ; ejecutar interrupcion
+    mov al, 0x0a                  ; salto de linea
+    int 0x10                      ; ejecutar interrupcion
+    ret                           ; volver al coigo anterior
+; imprimir string
+print:
+    push ax                       ; respaldar ax
+    push bx                       ; respaldar bx
+    push cx                       ; respaldar cx
+    mov ah, 0x03                  ; opcion 0x03 para conseguir posicion de cursor (en dx)
+    mov bh, 0x00                  ; pagina 0
+    int 0x10                      ; interrupcion 0x10
+    pop cx                        ; recuperamos cx ya que cambio con la interrupcion anterior
+    push cx                       ; volvemos a respaldarlo
+    mov ah, 0x13                  ; opcion 0x13 para imprimir cadena
+    mov al, 1                     ; atributos
+    mov bh, 0x00                  ; pagina
+    mov bl, 0x0f                  ; fondo negro y texto blanca
+    int 0x10                      ; interrupcion 0x10
+    pop cx                        ; recuperar cx
+    pop bx                        ; recuperar bx
+    pop ax                        ; recuperar ax
+    ret                           ; volver al codigo
+; imprimir con salto de linea
+printn:
+    call print                    ; imprimir texto
+    call newLine                  ; imprimir salto de linea
+    ret                           ; volver al codigo
