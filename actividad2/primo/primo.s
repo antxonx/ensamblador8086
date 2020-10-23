@@ -28,6 +28,9 @@ primo_recorrido:
 ;---------- evaluar
     mov rcx, 0x02
 primo_evaluar:
+    cmp rcx, [rel eval]
+    jz primo_print
+
     xor rdx, rdx
     mov rax, [rel eval]
     div rcx
@@ -36,6 +39,8 @@ primo_evaluar:
     inc rcx
     cmp rcx, [rel eval]
     jnge primo_evaluar
+
+primo_print:
     mov rdi, frmt
     mov rsi, [rel eval]
     mov rax, 0x00
